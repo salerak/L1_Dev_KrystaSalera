@@ -1,13 +1,35 @@
 package ca.krystasalera.controller;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ca.krystasalera.services.PostService;
 
 @Controller
 public class PostController {
 
-	@RequestMapping("/")
-	String home() {
+	private final PostService postService;
+	
+	@Inject
+	public PostController(final PostService postService){
+		this.postService=postService;
+	}
+	
+	
+	
+	@RequestMapping(value="/", method = RequestMethod.GET)
+	public String home() {
 		return "home";
+	}
+	
+	@RequestMapping(value="/api/getText", params = { "text" })
+	@ResponseBody
+	public String getText(@RequestParam("text") String text){
+		return "Hello" + text;
 	}
 }
