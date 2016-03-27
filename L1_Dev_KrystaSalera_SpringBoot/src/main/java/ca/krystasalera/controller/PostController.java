@@ -27,9 +27,5 @@ public class PostController {
 		return "home";
 	}
 	
-	@RequestMapping(value="/api/getText", params = { "text" })
-	@ResponseBody
-	public String getText(@RequestParam("text") String text){
-		return "Hello" + text;
-	}
+
 }
