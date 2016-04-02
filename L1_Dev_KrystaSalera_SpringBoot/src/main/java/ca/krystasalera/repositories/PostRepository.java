@@ -23,10 +23,14 @@ import ca.krystasalera.domain.Post;
 public interface PostRepository extends JpaRepository<Post, String> {
 	
 	@Query("from Post p where p.userAcctName = ?1 order by created desc")
-	List<Post> getAllByUser(String user);
-	//@Query("from Post order by created desc")
-	List<Post> getAll();
-	//@Query("from Post p where p.uid= ?1")
+	List<Post> findAllByUser(String user);
+
+	
 	Post getById(int uid);
+
+	List<Post> findAllPosts();
+	
+//	@Query("select top 1 uid from Post p order by uid desc ")
+//	int findLatestId();
 	
 }

@@ -8,9 +8,21 @@ import ca.krystasalera.domain.Post;
 
 public interface PostService {
 	
-	Post save(Post post);
-	List<Post> getAllByUser(String user);
+	Post savePost(Post post);
+	List<Post> findAllByUser(String user);
+
 	
-	List<Post> getAll();
+	Post getById(int uid);
+	
+
+	Post findLatestId();
+	
+
+	List<Post> findAllPosts();
+	Post findById(int id);
+	boolean isPostExist(Post post);
+	void updatePost(Post currentPost);
+	void deletePostById(long id);
+	void deleteAllPosts();
 
 }

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+
+<title>MVC Home</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link href="../static/css/bootstrap.css" th:href="@{css/bootstrap.css}"
+	rel="stylesheet" media="screen" />
+
+<link href="../static/css/bootstrap-theme.css"
+	th:href="@{css/bootstrap-theme.css}" rel="stylesheet" media="screen" />
+
+
+<script type="text/javascript" src="../static/js/jquery-2.2.2.js"
+	th:src="@{js/jquery-2.2.2.js}"></script>
+
+
+<script type="text/javascript" src="../static/js/tether.js"
+	th:src="@{js/tether.js}"></script>
+
+
+
+<script type="text/javascript" src="../static/js/bootstrap.js"
+	th:src="@{js/bootstrap.js}"></script>
+
+
+</head>
+<body>
+
+
+	<div class="container">
+		<div class="jumbotron">
+
+			<h1>Form</h1>
+			<form action="#" th:action="@{/mvchome}" th:object="${post}"
+				method="post">
+
+				<table>
+
+					<tr>
+						<td>Username:</td>
+						<td><input type="text" th:field="*{userAcctName}" /></td>
+					</tr>
+					<tr>
+						<td>City:</td>
+						<td><input type="text" th:field="*{city}" /></td>
+					</tr>
+					<tr>
+						<td>Content:</td>
+						<td><input type="text" th:field="*{content}" /></td>
+					</tr>
+					<tr>
+						<td><button class="btn btn-primary" type="submit"
+								name="action" value="save">Submit post</button></td>
+						<td><a class="btn btn-secondary-outline" th:href="@{/getAll}">Get
+								All</a></td>
+						<td><a class="btn btn-secondary-outline" th:href="@{/getAllByUser}">Get
+								All By User</a></td>
+
+					</tr>
+
+
+				</table>
+
+
+			</form>
+
+
+
+		</div>
+		<div>
+			<!-- 		<button type="button" th:href="@{/getAll}"> Get All </button> -->
+		</div>
+
+		<!--  Results Block -->
+
+		<th:block th:each="post : ${postsList}">
+
+
+			<div class="card ">
+				<div>
+					User Account:<span class="card-header"
+						th:text="${post.userAcctName}">User Name</span>
+				</div>
+
+				<div class="card-block">
+					<h4 th:inline="text">
+						Subject:<span class="card-title" id="test"
+							th:text="${post.subject}">Subject</span>
+					</h4>
+					Date Created:
+					<h6 class="card-subtitle text-muted" th:text="${post.created}">Date
+						Created</h6>
+				</div>
+
+				<div class="card-block">
+					Content:
+					<p class="card-text" th:text="${post.content}">Post Data</p>
+					<a href="#" class="card-link"></a>
+					<button type="button" class="btn btn-sm btn-danger"
+						data-toggle="popover"
+						th:attr="title=${post.city},data-content=${post.city}">Details...</button>
+				</div>
+				Temperature:
+				<div class="card-footer text-muted" th:text="${post.temperature}"></div>
+			</div>
+
+		</th:block>
+
+
+
+	</div>
+
+	<script>
+	
+	
+	
+		function getAllByUser() {
+
+			$.ajax({
+				type : "get",
+				url : "https://localhost:8443/api/getAllForUser",
+				cache : false,
+				data : 'user=' + $("#userAcctName").val(),
+				success : function(response) {
+					alert(response);
+
+					//some how pass this response data to ${postsList}
+
+					$('#test').html("" + response[0].subject);
+
+					$(".card").children().removeClass('hidden');
+					$('[data-toggle="popover"]').popover();
+				},
+				error : function() {
+					alert('Error while request..');
+				}
+			});
+		}
+
+		$(document).ready(function() {
+			$('[data-toggle="popover"]').popover();
+			// 			$(".bg-success").children().addClass('hidden');
+
+		});
+	</script>
+
+</body>
+</html>

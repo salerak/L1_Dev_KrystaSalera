@@ -53,10 +53,10 @@
 				<p>
 					<input type="button" value="Done" onclick="getText()" />
 				</p>
-				<p>
-					<input type="button" value="Get All By User"
-						onclick="getAllByUser()" />
-				</p>
+<!-- 				<p> -->
+<!-- 					<input type="button" value="Get All By User" -->
+<!-- 						onclick="getAllByUser()" /> -->
+<!-- 				</p> -->
 			</form>
 		</div>
 
@@ -83,58 +83,10 @@
 
 	</div>
 
-	<div >
-
-		<th:block th:each="post : ${postsList}">
-
-
-			<div class="card ">
-				<div class="card-block">
-					<h4 class="card-title" id="test" th:text="${post.subject}">Subject</h4>
-					<h6 class="card-subtitle text-muted" th:text="${post.created">Date
-						Created</h6>
-				</div>
-
-				<div class="card-block">
-					<p class="card-text" th:text="${post.content}">Post Data</p>
-					<a href="#" class="card-link"></a>
-					<button type="button" class="btn btn-sm btn-danger"
-						data-toggle="popover" title="Popover title"
-						data-content="th:text='${post.city}'">See Popover</button>
-				</div>
-				<div class="card-footer text-muted" th:text="${post.temperature}"></div>
-			</div>
-
-		</th:block>
-
-
-
-	</div>
-
+	
 
 	<script>
-		function getAllByUser() {
-
-			$.ajax({
-				type : "get",
-				url : "https://localhost:8443/api/getAllForUser",
-				cache : false,
-				data : 'user=' + $("#userAcctName").val(),
-				success : function(response) {
-					alert(response);
-				
-					//some how pass this response data to ${postsList}
-					
-					$('#test').html("" + response[0].subject);
-
-					$(".card").children().removeClass('hidden');
-					$('[data-toggle="popover"]').popover();
-				},
-				error : function() {
-					alert('Error while request..');
-				}
-			});
-		}
+		
 		function getText() {
 
 			$.ajax({

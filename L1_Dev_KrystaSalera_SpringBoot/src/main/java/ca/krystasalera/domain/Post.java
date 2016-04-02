@@ -1,5 +1,6 @@
 package ca.krystasalera.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,22 +10,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
-@NamedQueries({ @NamedQuery(name = "Post.getAll", query = "from Post order by created desc"),
+@NamedQueries({ @NamedQuery(name = "Post.findAllPosts", query = "from Post order by created desc"),
 		@NamedQuery(name = "Post.getById", query = " from Post p where p.uid= ?1")
 
 })
-public class Post {
+public class Post implements Serializable {
+
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	// Configuration of post
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@NotNull
 
-	@Column(name = "uid", nullable = false, updatable = false)
+
+	@Column(name = "uid")
 	private int uid; // the unique identifier for each record, cannot be null
 
 	@Column(name = "parentId", nullable = true, updatable = false)
@@ -38,43 +49,44 @@ public class Post {
 	private int indentLevel; // how much to indent this item,can be null
 
 	// Information about post
-	@NotNull
+	
 	@Size(max = 64)
 	@Column(name = "content", nullable = true, updatable = true)
 	private String content; // data of specific post,cannot be null
 
-	@NotNull
+	
 	@Size(max = 64)
 	@Column(name = "subject", nullable = true, updatable = true)
 	private String subject; // thread of post, all post with same subject is in
 							// one thread,cannot be null
 
-	@NotNull
-
+	
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat (pattern="dd-MMM-YYYY")
 	@Column(name = "created", nullable = true, updatable = true)
 	private Date created; // date of post,cannot be null
 
-	@NotNull
+
 	@Size(max = 64)
 	@Column(name = "userAcctName", nullable = true, updatable = true)
 	private String userAcctName; // user of post,cannot be null
 
-	@NotNull
+	
 	@Size(max = 64)
 	@Column(name = "city", nullable = true, updatable = true)
 	private String city; // location of post,cannot be null
 
-	// @NotNull
+	
 	@Size(max = 64)
 	@Column(name = "longtitude", nullable = true, updatable = true)
 	private String longtitude; // location of post,cannot be null
 
-	// @NotNull
+	
 	@Size(max = 64)
 	@Column(name = "latitude", nullable = true, updatable = true)
 	private String latitude; // location of post,cannot be null
 
-	// @NotNull
+	
 	@Size(max = 64)
 	@Column(name = "temperature", nullable = true, updatable = true)
 	private String temperature; // location of post,cannot be null
@@ -122,7 +134,7 @@ public class Post {
 	}
 
 	public Post() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	/**
