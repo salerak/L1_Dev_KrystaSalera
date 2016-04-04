@@ -1,6 +1,7 @@
 package ca.krystasalera.domain;
 
-import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,25 +11,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@NamedQueries({ @NamedQuery(name = "Post.findAllPosts", query = "from Post order by created desc"),
+@NamedQueries({ @NamedQuery(name = "Post.findAllPosts", query = "from Post order by created desc "),
 		@NamedQuery(name = "Post.getById", query = " from Post p where p.uid= ?1")
 
 })
-public class Post implements Serializable {
+public class Post {
 
 	
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	// Configuration of post
 	@Id
@@ -61,8 +56,9 @@ public class Post implements Serializable {
 							// one thread,cannot be null
 
 	
-	@Temporal(TemporalType.DATE)
-	@DateTimeFormat (pattern="dd-MMM-YYYY")
+	//@Temporal(TemporalType.DATE)
+	//@DateTimeFormat (pattern="EEE, dd MMM yyyy HH:mm:ss zzz")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="EEE, dd MMM yyyy HH:mm:ss zzz", timezone="DEFAULT_TIMEZONE")
 	@Column(name = "created", nullable = true, updatable = true)
 	private Date created; // date of post,cannot be null
 
@@ -231,7 +227,8 @@ public class Post implements Serializable {
 	 * @return the created
 	 */
 	public String getCreated() {
-		return created.toString();
+		DateFormat df= new SimpleDateFormat( "EEE, dd MMM yyyy HH:mm:ss zzz");
+		return df.format(created);
 	}
 
 	/**

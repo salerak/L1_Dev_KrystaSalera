@@ -24,11 +24,11 @@ import ca.krystasalera.L1DevKrystaSaleraSpringBootApplication;
 import ca.krystasalera.domain.Post;
 import ca.krystasalera.services.PostService;
 
-@RequestMapping(value = "/api/*")
+@RequestMapping(value = "/api/")
 @RestController
 public class PostApiController {
 
-	static final Logger logger = LogManager.getLogger(L1DevKrystaSaleraSpringBootApplication.class.getName());
+	static final Logger logger = LogManager.getLogger(PostApiController.class.getName());
 	private final PostService postService;
 	
 
@@ -97,54 +97,77 @@ public class PostApiController {
 	
 	 //-------------------Retrieve All Posts--------------------------------------------------------
     
-    @RequestMapping(value = "/post/", method = RequestMethod.GET)
-    public ResponseEntity<List<Post>> listAllUsers() {
+    @RequestMapping(value = "post", method = RequestMethod.GET)
+    public ResponseEntity<List<Post>> getAllPosts() {
         List<Post> posts = postService.findAllPosts();
+        
+//        if(posts!=null){
+//            for(Post map : posts){
+//            	logger.info("Post : id="+map.getUid());
+//            }
+//        }else{
+//        	logger.info("No post exist----------");
+//        }
+
+        
         if(posts.isEmpty()){
-            return new ResponseEntity<List<Post>>(HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+            return new ResponseEntity<List<Post>>(HttpStatus.NO_CONTENT);//Or  return HttpStatus.NOT_FOUND
         }
         return new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
     }
  
  
-    //-------------------Retrieve Single Post--------------------------------------------------------
+    //-------------------Retrieve Single Post by Id--------------------------------------------------------
      
-    @RequestMapping(value = "/post/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Post> getUser(@PathVariable("id") int id) {
+    @RequestMapping(value = "post/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Post> getOnePostById(@PathVariable("id") int id) {
         System.out.println("Fetching Post with id " + id);
         Post post = postService.findById(id);
         if (post == null) {
-            System.out.println("Post with id " + id + " not found");
+        	logger.info("Post with id " + id + " not found");
             return new ResponseEntity<Post>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Post>(post, HttpStatus.OK);
     }
  
-     
+    //-------------------Retrieve All Posts by User --------------------------------------------------------
+    
+    @RequestMapping(value = "postbyuser/{user}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Post>> getOnePostByUser(@PathVariable("user") String user) {
+        System.out.println("Fetching Post with user " + user);
+        List<Post> posts = postService.findAllByUser(user);
+        if (posts == null) {
+            System.out.println("Post with user " + user + " not found");
+            return new ResponseEntity<List<Post>>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
+    }
+ 
      
     //-------------------Create a Post--------------------------------------------------------
      
-    @RequestMapping(value = "/post/", method = RequestMethod.POST)
-    public ResponseEntity<Void> createUser(@RequestBody Post post,    UriComponentsBuilder ucBuilder) {
+    @RequestMapping(value = "post", method = RequestMethod.POST)
+    public ResponseEntity<Post> createPost(@RequestBody Post post) {
         System.out.println("Creating Post " + post.toString());
  
         if (postService.isPostExist(post)) {
             System.out.println("A Post with name " + post.toString() + " already exist");
-            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Post>(HttpStatus.CONFLICT);
         }
  
         postService.savePost(post);
  
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/post/{id}").buildAndExpand(post.getUid()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(ucBuilder.path("/post/{id}").buildAndExpand(post.getUid()).toUri());
+//        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<Post>(post, HttpStatus.CREATED);
     }
  
      
     //------------------- Update a Post --------------------------------------------------------
      
-    @RequestMapping(value = "/post/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Post> updateUser(@PathVariable("id") int id, @RequestBody Post post) {
+    @RequestMapping(value = "post/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Post> updatePost(@PathVariable("id") int id, @RequestBody Post post) {
         System.out.println("Updating Post " + id);
          
         Post currentPost = postService.findById(id);
@@ -164,8 +187,8 @@ public class PostApiController {
  
     //------------------- Delete a Post --------------------------------------------------------
      
-    @RequestMapping(value = "/post/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Post> deleteUser(@PathVariable("id") int id) {
+    @RequestMapping(value = "post/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Post> deletePost(@PathVariable("id") int id) {
         System.out.println("Fetching & Deleting Post with id " + id);
  
         Post post = postService.findById(id);
@@ -179,10 +202,10 @@ public class PostApiController {
     }
  
      
-    //------------------- Delete All Users --------------------------------------------------------
+    //------------------- Delete All Posts --------------------------------------------------------
      
-    @RequestMapping(value = "/post/", method = RequestMethod.DELETE)
-    public ResponseEntity<Post> deleteAllUsers() {
+    @RequestMapping(value = "post", method = RequestMethod.DELETE)
+    public ResponseEntity<Post> deleteAllPosts() {
         System.out.println("Deleting All Users");
  
         postService.deleteAllPosts();

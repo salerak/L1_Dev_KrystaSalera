@@ -15,6 +15,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import ca.krystasalera.services.PostService;
 
@@ -36,11 +37,17 @@ public class PostControllerTests {
 	@Before
 	public void setup() {
 		
+		
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/templates/");
+        viewResolver.setSuffix(".html");
+
+		
 		//Process mock annotations
 		MockitoAnnotations.initMocks(this);
 		
 		//setup spring test in standalone mode
-		this.mockMvc = MockMvcBuilders.standaloneSetup(postController).build();
+		this.mockMvc = MockMvcBuilders.standaloneSetup(postController).setViewResolvers(viewResolver).build();
 		
 		
 		//postService= new PostServiceImpl(postRepository);
@@ -51,7 +58,7 @@ public class PostControllerTests {
 	@Test
 	public void testHomeLoads() throws Exception {
 
-		mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("home"));
+		mockMvc.perform(get("/home")).andExpect(status().isOk()).andExpect(view().name("home"));
 
 	}
 

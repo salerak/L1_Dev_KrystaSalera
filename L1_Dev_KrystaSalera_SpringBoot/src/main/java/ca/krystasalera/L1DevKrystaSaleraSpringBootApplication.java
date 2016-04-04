@@ -11,6 +11,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.ViewResolver;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @SpringBootApplication
 public class L1DevKrystaSaleraSpringBootApplication {
@@ -34,7 +38,8 @@ public class L1DevKrystaSaleraSpringBootApplication {
 	          SecurityConstraint securityConstraint = new SecurityConstraint();
 	          securityConstraint.setUserConstraint("CONFIDENTIAL");
 	          SecurityCollection collection = new SecurityCollection();
-	          collection.addPattern("/*");
+	          collection.addPattern("/mvchome/*");
+	          collection.addPattern("/home/*");
 	          securityConstraint.addCollection(collection);
 	          context.addConstraint(securityConstraint);
 	        }
@@ -52,5 +57,22 @@ public class L1DevKrystaSaleraSpringBootApplication {
 	    connector.setRedirectPort(8443);
 	    return connector;
 	  }
+	  
+	  
+	  @Bean
+	  public ViewResolver viewResolver() {
+	    ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+	    templateResolver.setTemplateMode("XHTML");
+	    templateResolver.setPrefix("web/");
+	    templateResolver.setSuffix(".html");
+
+	    SpringTemplateEngine engine = new SpringTemplateEngine();
+	    engine.setTemplateResolver(templateResolver);
+
+	    ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+	    viewResolver.setTemplateEngine(engine);
+	    return viewResolver;
+	  }
+
 	
 }
