@@ -1,10 +1,126 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+
+<title>MVC Home</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+
+<link href="../../css/bootstrap.css" th:href="@{/css/bootstrap.css}"
+	rel="stylesheet" media="screen" />
+
+<link href="../../css/bootstrap-theme.css"
+	th:href="@{/css/bootstrap-theme.css}" rel="stylesheet" media="screen" />
+
+
+<script type="text/javascript" src="../../js/jquery-2.2.2.js"
+	th:src="@{/js/jquery-2.2.2.js}"></script>
+
+
+<script type="text/javascript" src="../../js/tether.js"
+	th:src="@{/js/tether.js}"></script>
+
+
+
+<script type="text/javascript" src="../../js/bootstrap.js"
+	th:src="@{/js/bootstrap.js}"></script>
+
+
+
 </head>
 <body>
+
+
+	<div class="container" th:with="postitem=${postsList}">
+
+
+		<!--  Results Block -->
+
+		
+
+
+			<div class="card ">
+				<div>
+					User Account: <span class="card-header"
+						th:text="${postitem.userAcctName}">User Name</span>
+				</div>
+
+				<div class="card-block">
+					<h4 th:inline="text">
+						Subject:<span class="card-title" id="test"
+							th:text="${postitem.subject}">Subject</span>
+					</h4>
+					Date Created:
+					<h6 class="card-subtitle text-muted" th:text="${postitem.created}">Date
+						Created</h6>
+				</div>
+
+				<div class="card-block">
+					Content:
+					<p class="card-text" th:text="${postitem.content}">Post Data</p>
+					<a href="#" class="card-link"></a>
+					<button type="button" class="btn btn-sm btn-danger"
+						data-toggle="popover"
+						th:attr="title=${postitem.city},data-content=${postitem.city}">Details...</button>
+				</div>
+				Temperature:
+				<div class="card-footer text-muted" th:text="${postitem.temperature}"></div>
+			</div>
+
+
+		
+
+		<!--  Form Block -->
+
+		<div class="jumbotron">
+
+			<h1>Form</h1>
+			<form action="#" th:action="@{/replytopost/{id}(id=${postitem.uid})}" th:object="${post}"
+				method="post">
+
+				<table>
+
+					<tr>
+						<td>Username:</td>
+						<td><input type="text" id="userAcctNameId"
+							th:field="*{userAcctName}" onblur="checkTextField(this);" /></td>
+					</tr>
+					<tr>
+						<td>City:</td>
+						<td><input type="text" th:field="*{city}" /></td>
+					</tr>
+					<tr>
+						<td>Content:</td>
+						<td><input type="text" th:field="*{content}" /></td>
+					</tr>
+					<tr>
+						<td><button class="btn btn-primary" type="submit"
+								name="action" value="save">Submit post</button></td>
+
+					</tr>
+
+
+				</table>
+
+
+			</form>
+
+
+
+		</div>
+		
+
+
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			$('[data-toggle="popover"]').popover();
+			// 			$(".bg-success").children().addClass('hidden');
+
+		});
+	</script>
 
 </body>
 </html>

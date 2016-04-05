@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = "Post.findAllPosts", query = "from Post order by created desc "),
-		@NamedQuery(name = "Post.getById", query = " from Post p where p.uid= ?1")
+		@NamedQuery(name = "Post.findById", query = " from Post p where p.uid= ?1")
 
 })
 public class Post {

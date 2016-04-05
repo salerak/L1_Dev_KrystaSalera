@@ -26,7 +26,7 @@ public interface PostRepository extends JpaRepository<Post, String> {
 	List<Post> findAllByUser(String user);
 
 	
-	Post getById(int uid);
+	Post findById(int uid);
 
 	List<Post> findAllPosts();
 	

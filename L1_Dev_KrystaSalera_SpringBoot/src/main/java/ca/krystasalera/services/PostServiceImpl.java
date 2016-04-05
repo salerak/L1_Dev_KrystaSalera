@@ -55,8 +55,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public Post findById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return postRepository.findById(id);
 	}
 
 	@Override

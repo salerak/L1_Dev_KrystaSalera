@@ -111,7 +111,7 @@
 				</div>
 				Temperature:
 				<div class="card-footer text-muted" th:text="${post.temperature}"></div>
-				<div><button type="button" class="btn btn-sm btn-info" th:href="@{/order/list}" >Reply</button></div>
+				<div><a class="btn btn-sm btn-info" th:href="@{/replytopost/{id}(id=${post.uid})}" >Reply</a></div>
 			</div>
 
 			
