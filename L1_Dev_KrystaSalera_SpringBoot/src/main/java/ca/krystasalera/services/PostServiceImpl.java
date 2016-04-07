@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,12 +46,6 @@ public class PostServiceImpl implements PostService {
 		return null;
 	}
 
-	@Override
-	public Post findLatestId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 
 	@Override
@@ -80,6 +75,17 @@ public class PostServiceImpl implements PostService {
 	public void deleteAllPosts() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void incrementRank(int start_rank) {
+		postRepository.incrementRank(start_rank);
+		
+	}
+
+	@Override
+	public List<Post> findLatestPost(Pageable pageable) {
+		return postRepository.findLatestPost(pageable);
 	}
 
 

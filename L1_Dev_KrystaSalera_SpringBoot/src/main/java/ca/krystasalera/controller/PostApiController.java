@@ -7,7 +7,8 @@ import javax.inject.Inject;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpHeaders;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import ca.krystasalera.L1DevKrystaSaleraSpringBootApplication;
 import ca.krystasalera.domain.Post;
 import ca.krystasalera.services.PostService;
 
@@ -116,6 +115,22 @@ public class PostApiController {
         return new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
     }
  
+    
+    //-------------------Retrieve Latest Post --------------------------------------------------------
+    
+    @RequestMapping(value = "latestpost", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Post>> getLatestPost() {
+        System.out.println("Fetching latest post  " );
+        Pageable topOne = new PageRequest(0, 1);
+        List<Post> post = postService.findLatestPost(topOne);
+        
+        if (post == null) {
+        	logger.info("Latest Post  not found");
+            return new ResponseEntity<List<Post>> (HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<Post>> (post, HttpStatus.OK);
+    }
+    
  
     //-------------------Retrieve Single Post by Id--------------------------------------------------------
      

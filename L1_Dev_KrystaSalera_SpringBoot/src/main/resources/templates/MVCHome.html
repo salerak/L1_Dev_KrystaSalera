@@ -85,7 +85,7 @@
 		<th:block th:each="post : ${postsList}">
 
 			
-			<div class="card ">
+			<div class="card " th:style="|padding-left:${post.indentLevel}%;|">
 				<div>
 					User Account: <span class="card-header"
 						th:text="${post.userAcctName}">User Name</span>

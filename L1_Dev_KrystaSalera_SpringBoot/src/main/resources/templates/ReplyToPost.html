@@ -35,56 +35,21 @@
 	<div class="container" th:with="postitem=${postsList}">
 
 
-		<!--  Results Block -->
-
-		
-
-
-			<div class="card ">
-				<div>
-					User Account: <span class="card-header"
-						th:text="${postitem.userAcctName}">User Name</span>
-				</div>
-
-				<div class="card-block">
-					<h4 th:inline="text">
-						Subject:<span class="card-title" id="test"
-							th:text="${postitem.subject}">Subject</span>
-					</h4>
-					Date Created:
-					<h6 class="card-subtitle text-muted" th:text="${postitem.created}">Date
-						Created</h6>
-				</div>
-
-				<div class="card-block">
-					Content:
-					<p class="card-text" th:text="${postitem.content}">Post Data</p>
-					<a href="#" class="card-link"></a>
-					<button type="button" class="btn btn-sm btn-danger"
-						data-toggle="popover"
-						th:attr="title=${postitem.city},data-content=${postitem.city}">Details...</button>
-				</div>
-				Temperature:
-				<div class="card-footer text-muted" th:text="${postitem.temperature}"></div>
-			</div>
-
-
-		
 
 		<!--  Form Block -->
 
 		<div class="jumbotron">
 
 			<h1>Form</h1>
-			<form action="#" th:action="@{/replytopost/{id}(id=${postitem.uid})}" th:object="${post}"
-				method="post">
+			<form action="#" th:action="@{/replytopost/{id}(id=${postitem.uid})}"
+				th:object="${post}" method="post">
 
 				<table>
 
 					<tr>
 						<td>Username:</td>
 						<td><input type="text" id="userAcctNameId"
-							th:field="*{userAcctName}" onblur="checkTextField(this);" /></td>
+							th:field="*{userAcctName}"  /></td>
 					</tr>
 					<tr>
 						<td>City:</td>
@@ -109,7 +74,41 @@
 
 
 		</div>
-		
+
+		<!--  Results Block -->
+
+
+
+		<h1>Replying To:</h1>
+		<div class="card ">
+			<div>
+				User Account: <span class="card-header"
+					th:text="${postitem.userAcctName}">User Name</span>
+			</div>
+
+			<div class="card-block">
+				<h4 th:inline="text">
+					Subject:<span class="card-title" id="test"
+						th:text="${postitem.subject}">Subject</span>
+				</h4>
+				Date Created:
+				<h6 class="card-subtitle text-muted" th:text="${postitem.created}">Date
+					Created</h6>
+			</div>
+
+			<div class="card-block">
+				Content:
+				<p class="card-text" th:text="${postitem.content}">Post Data</p>
+				<a href="#" class="card-link"></a>
+				<button type="button" class="btn btn-sm btn-danger"
+					data-toggle="popover"
+					th:attr="title=${postitem.city},data-content=${postitem.city}">Details...</button>
+			</div>
+			Temperature:
+			<div class="card-footer text-muted" th:text="${postitem.temperature}"></div>
+		</div>
+
+
 
 
 	</div>

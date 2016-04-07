@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.mysql.jdbc.CallableStatement;
 
 import ca.krystasalera.domain.Post;
 import ca.krystasalera.services.PostService;
@@ -42,6 +45,7 @@ public class PostController {
 
 	@RequestMapping(value = "home", method = RequestMethod.GET)
 	public String home() {
+
 		return "home";
 	}
 
@@ -53,12 +57,14 @@ public class PostController {
 		return "mvchome";
 	}
 
-	////////////////// REST TEMPLATE /////////////////////////////
+	//////////////////////////////////////////// REST TEMPLATE
+	//////////////////////////////////////////// ///////////////////////////////////////////
+	//////////////////////////////////////////// /////////////////////////////////////////////////////////
 
 	@RequestMapping(value = "mvchome", method = RequestMethod.POST)
 	// public String create(@Valid Post post, BindingResult bindingResult, Model
 	// model) {
-	public ModelAndView create(@Valid Post post) {
+	public ModelAndView create(@Valid Post postData) {
 		// if (bindingResult.hasErrors()) {
 		// ModelAndView mav = new ModelAndView("mvchome");
 		// Post newpost = new Post();
@@ -68,16 +74,40 @@ public class PostController {
 		// }
 		// Post post = new Post(0, 1, 0, content,content, new
 		// Date(),userAcctName,city, null, null, null);
+
+		// get last created's display order and increment by 1
+		RestTemplate restTemplate = new RestTemplate();
+
+		ResponseEntity<List<Post>> latestPostRresponseEntity = restTemplate.exchange(REST_SERVICE_URI + "/latestpost",
+				HttpMethod.GET, null, new ParameterizedTypeReference<List<Post>>() {
+				});
+
+		List<Post> manyPosts = latestPostRresponseEntity.getBody();
+		Post latestPost;
+		if (manyPosts.isEmpty()) {
+			latestPost = null;
+		} else {
+
+			latestPost = latestPostRresponseEntity.getBody().get(0);
+		}
+
+		Post post = new Post();
 		post.setParentId(0);
-		post.setDisplayOrder(1);
-		post.setIndentLevel(0);
-		post.setSubject(post.getContent());
+		if (latestPost == null) {
+			post.setDisplayOrder(1);
+		} else {
+
+			post.setDisplayOrder(latestPost.getDisplayOrder() + 1);
+		}
+		post.setIndentLevel(1);
+		post.setUserAcctName(postData.getUserAcctName());
+		post.setSubject(postData.getContent());
+		post.setContent(postData.getContent());
 		post.setCreated(new Date());
+		post.setCity(postData.getCity());
 		post.setLatitude("Lat");
 		post.setLongtitude("Long");
 		post.setTemperature("90 C");
-
-		RestTemplate restTemplate = new RestTemplate();
 
 		ResponseEntity<Post> responseEntity = restTemplate.postForEntity(REST_SERVICE_URI + "/post", post, Post.class);
 
@@ -94,7 +124,6 @@ public class PostController {
 		return mav;
 
 	}
-
 
 	@RequestMapping(value = "getall")
 	// public String create(@Valid Post post, BindingResult bindingResult, Model
@@ -156,9 +185,8 @@ public class PostController {
 		return mav;
 
 	}
-	
-	
-	@RequestMapping(value = "replytopost/{id}", method= RequestMethod.GET)
+
+	@RequestMapping(value = "replytopost/{id}", method = RequestMethod.GET)
 	// public String create(@Valid Post post, BindingResult bindingResult, Model
 	// model) {
 	public ModelAndView replyToPost(@PathVariable int id) {
@@ -168,17 +196,14 @@ public class PostController {
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<Post> responseEntity = restTemplate.getForEntity(REST_SERVICE_URI + "/post/" + id,Post.class);
+		ResponseEntity<Post> responseEntity = restTemplate.getForEntity(REST_SERVICE_URI + "/post/" + id, Post.class);
 		Post post = responseEntity.getBody();
-		
-		//get parent item
-		//return parent item in reply to post view to be created
-		//in view display form 
-		//form submit use post of replytoform/id
-		
-		
-		
-		
+
+		// get parent item
+		// return parent item in reply to post view to be created
+		// in view display form
+		// form submit use post of replytoform/id
+
 		// List<Post> postList = postService.findAllByUser(user);
 		ModelAndView mav = new ModelAndView("replytopost");
 		mav.addObject("postsList", post);
@@ -189,37 +214,68 @@ public class PostController {
 
 	}
 
-	@RequestMapping(value = "replytopost/{id}", method= RequestMethod.POST)
+	@RequestMapping(value = "replytopost/{id}", method = RequestMethod.POST)
 	// public String create(@Valid Post post, BindingResult bindingResult, Model
 	// model) {
-	public ModelAndView createReplyToPost(@PathVariable int id) {
+	public ModelAndView createReplyToPost(@Valid Post postData, @PathVariable int id) {
 		// if (bindingResult.hasErrors()) {
 		// return "mvchome";
 		// }
 
-		//obtain parent object via id using rest call
-		//create new object and set its parent id to parent object id
-		//set indent level to 1
-		//store in db
-		//show newly created post via mvchome
-		
-		
-		//modify get all query to get all and organize by parent then child
-		//modify mvchome view to show child items
-		//limit child depth to 1 or 2? per parent
-		
-		
-		
-		
+		// obtain parent object via id using rest call
+		// create new object and set its parent id to parent object id
+		// set indent level to 1
+		// store in db
+		// show newly created post via mvchome
+
+		// modify get all query to get all and organize by parent then child
+		// modify mvchome view to show child items
+		// limit child depth to 1 or 2? per parent
+
 		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<List<Post>> responseEntity = restTemplate.exchange(REST_SERVICE_URI + "/postbyuser/" + id,
-				HttpMethod.GET, null, new ParameterizedTypeReference<List<Post>>() {
+		ResponseEntity<Post> parentResponseEntity = restTemplate.getForEntity(REST_SERVICE_URI + "/post/" + id,
+				Post.class);
+		Post parentPost = parentResponseEntity.getBody();
+
+		if (parentPost == null) {
+			logger.info("No parent post exist----------");
+		}
+
+		Post post = new Post();
+		post.setParentId(parentPost.getUid());
+		post.setDisplayOrder(parentPost.getDisplayOrder() + 1);
+		post.setIndentLevel(parentPost.getIndentLevel() + 2);
+		post.setUserAcctName(postData.getUserAcctName());
+		post.setSubject(parentPost.getContent());
+		post.setContent(postData.getContent());
+		post.setCreated(new Date());
+		post.setCity(postData.getCity());
+		post.setLatitude("Lat");
+		post.setLongtitude("Long");
+		post.setTemperature("90 C");
+
+		postService.incrementRank(parentPost.getDisplayOrder());
+
+		ResponseEntity<Post> childResponseEntity = restTemplate.postForEntity(REST_SERVICE_URI + "/post", post,
+				Post.class);
+
+		Post childPost = childResponseEntity.getBody();
+
+		if (childPost == null) {
+			logger.info("No child post exist----------");
+		}
+
+		ResponseEntity<List<Post>> responseEntity = restTemplate.exchange(REST_SERVICE_URI + "/post", HttpMethod.GET,
+				null, new ParameterizedTypeReference<List<Post>>() {
 				});
-		List<Post> postList = responseEntity.getBody();
+
+		List<Post> postsMap = responseEntity.getBody();
+
 		// List<Post> postList = postService.findAllByUser(user);
-		ModelAndView mav = new ModelAndView("mvchome");
-		mav.addObject("postsList", postList);
+		ModelAndView mav = new ModelAndView(new RedirectView("/mvchome"));
+		mav.addObject("postsList", postsMap);
+
 		Post newpost = new Post();
 
 		mav.addObject("post", newpost);
