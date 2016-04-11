@@ -15,6 +15,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.Query;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -24,17 +26,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @NamedQueries({ @NamedQuery(name = "Post.findAllPosts", query = "from Post order by displayOrder "),
 		@NamedQuery(name = "Post.findById", query = " from Post p where p.uid= ?1"),
 		@NamedQuery(name = "Post.findLatestPost", query = " FROM Post p order by p.displayOrder desc ")
-		
 
 })
 
-
-
-//@NamedStoredProcedureQuery(name = "increment_rank", procedureName = "increment_rank", parameters = {
+// @NamedStoredProcedureQuery(name = "increment_rank", procedureName =
+// "increment_rank", parameters = {
 //
-//		@StoredProcedureParameter(mode = ParameterMode.IN, name = "start_rank", type = Integer.class)
+// @StoredProcedureParameter(mode = ParameterMode.IN, name = "start_rank", type
+// = Integer.class)
 //
-//})
+// })
 public class Post {
 
 	// Configuration of post
@@ -56,6 +57,7 @@ public class Post {
 
 	// Information about post
 
+	@NotBlank
 	@Size(max = 64)
 	@Column(name = "content", nullable = true, updatable = true)
 	private String content; // data of specific post,cannot be null
@@ -71,10 +73,12 @@ public class Post {
 	@Column(name = "created", nullable = true, updatable = true)
 	private Date created; // date of post,cannot be null
 
+	@NotBlank
 	@Size(max = 64)
 	@Column(name = "userAcctName", nullable = true, updatable = true)
 	private String userAcctName; // user of post,cannot be null
 
+	@NotBlank
 	@Size(max = 64)
 	@Column(name = "city", nullable = true, updatable = true)
 	private String city; // location of post,cannot be null
@@ -88,20 +92,16 @@ public class Post {
 	private String latitude; // location of post,cannot be null
 
 	@Size(max = 64)
+	@Column(name = "coordinates", nullable = true, updatable = true)
+	private String coordinates;
+
+	@Size(max = 64)
 	@Column(name = "temperature", nullable = true, updatable = true)
 	private String temperature; // location of post,cannot be null
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Post [uid=" + uid + ", parentId=" + parentId + ", displayOrder=" + displayOrder + ", indentLevel="
-				+ indentLevel + ", content=" + content + ", subject=" + subject + ", created=" + created
-				+ ", userAcctName=" + userAcctName + "]";
-	}
+
+
+	
 
 	/**
 	 * @param uid
@@ -115,11 +115,14 @@ public class Post {
 	 * @param city
 	 * @param longtitude
 	 * @param latitude
+	 * @param coordinates
 	 * @param temperature
 	 */
-	public Post(int parentId, int displayOrder, int indentLevel, String content, String subject, Date created,
-			String userAcctName, String city, String longtitude, String latitude, String temperature) {
-
+	public Post(int uid, int parentId, int displayOrder, int indentLevel, String content, String subject, Date created,
+			String userAcctName, String city, String longtitude, String latitude, String coordinates,
+			String temperature) {
+		
+		this.uid = uid;
 		this.parentId = parentId;
 		this.displayOrder = displayOrder;
 		this.indentLevel = indentLevel;
@@ -130,6 +133,7 @@ public class Post {
 		this.city = city;
 		this.longtitude = longtitude;
 		this.latitude = latitude;
+		this.coordinates = coordinates;
 		this.temperature = temperature;
 	}
 
@@ -304,6 +308,20 @@ public class Post {
 	}
 
 	/**
+	 * @return the coordinates
+	 */
+	public String getCoordinates() {
+		return coordinates;
+	}
+
+	/**
+	 * @param coordinates the coordinates to set
+	 */
+	public void setCoordinates(String coordinates) {
+		this.coordinates = coordinates;
+	}
+
+	/**
 	 * @return the temperature
 	 */
 	public String getTemperature() {
@@ -317,5 +335,18 @@ public class Post {
 	public void setTemperature(String temperature) {
 		this.temperature = temperature;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Post [uid=" + uid + ", parentId=" + parentId + ", displayOrder=" + displayOrder + ", indentLevel="
+				+ indentLevel + ", content=" + content + ", subject=" + subject + ", created=" + created
+				+ ", userAcctName=" + userAcctName + ", city=" + city + ", longtitude=" + longtitude + ", latitude="
+				+ latitude + ", coordinates=" + coordinates + ", temperature=" + temperature + "]";
+	}
+
+
 
 }

@@ -49,19 +49,31 @@
 					<tr>
 						<td>Username:</td>
 						<td><input type="text" id="userAcctNameId"
-							th:field="*{userAcctName}"  /></td>
+							th:field="*{userAcctName}" onblur="checkTextFieldUser(this);" /></td>
+						<td th:if="${#fields.hasErrors('userAcctName')}"
+							th:errors="*{userAcctName}">userAcctName Error</td>
 					</tr>
 					<tr>
 						<td>City:</td>
-						<td><input type="text" th:field="*{city}" /></td>
+						<td><input type="text" id="cityId" th:field="*{city}" /></td>
+						<td th:if="${#fields.hasErrors('city')}" th:errors="*{city}">city
+							Error</td>
 					</tr>
 					<tr>
 						<td>Content:</td>
 						<td><input type="text" th:field="*{content}" /></td>
+						<td th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content
+							Error</td>
 					</tr>
 					<tr>
+
 						<td><button class="btn btn-primary" type="submit"
 								name="action" value="save">Submit post</button></td>
+						
+
+
+
+						
 
 					</tr>
 
@@ -80,33 +92,67 @@
 
 
 		<h1>Replying To:</h1>
-		<div class="card ">
-			<div>
-				User Account: <span class="card-header"
-					th:text="${postitem.userAcctName}">User Name</span>
-			</div>
+		
+		<div class="card " th:style="|padding-left:${postitem.indentLevel}%;|">
+				<div>
+					User Account: <span class="card-header"
+						th:text="${postitem.userAcctName}">User Name</span>
+				</div>
 
-			<div class="card-block">
-				<h4 th:inline="text">
-					Subject:<span class="card-title" id="test"
-						th:text="${postitem.subject}">Subject</span>
-				</h4>
-				Date Created:
-				<h6 class="card-subtitle text-muted" th:text="${postitem.created}">Date
-					Created</h6>
-			</div>
+				<div class="card-block">
+					<h4 th:inline="text">
+						Subject:<span class="card-title" id="test"
+							th:text="${postitem.subject}">Subject</span>
+					</h4>
+					Date Created:
+					<h6 class="card-subtitle text-muted" th:text="${postitem.created}">Date
+						Created</h6>
+				</div>
 
-			<div class="card-block">
-				Content:
-				<p class="card-text" th:text="${postitem.content}">Post Data</p>
-				<a href="#" class="card-link"></a>
-				<button type="button" class="btn btn-sm btn-danger"
-					data-toggle="popover"
-					th:attr="title=${postitem.city},data-content=${postitem.city}">Details...</button>
+				<div class="card-block">
+					Content:
+					<p class="card-text" th:text="${postitem.content}">Post Data</p>
+					<a href="#" class="card-link"></a>
+					<button type="button" class="btn btn-sm btn-danger"
+						data-toggle="popover"
+						th:attr="title=${postitem.city} ,data-content=${postitem.coordinates}">Details...</button>
+				</div>
+				Temperature:
+				<div class="card-footer text-muted" th:text="${postitem.temperature}"></div>
+		
 			</div>
-			Temperature:
-			<div class="card-footer text-muted" th:text="${postitem.temperature}"></div>
-		</div>
+		
+		
+		
+		
+<!-- 		ééé -->
+<!-- 		<div class="card "> -->
+<!-- 			<div> -->
+<!-- 				User Account: <span class="card-header" -->
+<!-- 					th:text="${postitem.userAcctName}">User Name</span> -->
+<!-- 			</div> -->
+
+<!-- 			<div class="card-block"> -->
+<!-- 				<h4 th:inline="text"> -->
+<!-- 					Subject:<span class="card-title" id="test" -->
+<!-- 						th:text="${postitem.subject}">Subject</span> -->
+<!-- 				</h4> -->
+<!-- 				Date Created: -->
+<!-- 				<h6 class="card-subtitle text-muted" th:text="${postitem.created}">Date -->
+<!-- 					Created</h6> -->
+<!-- 			</div> -->
+
+<!-- 			<div class="card-block"> -->
+<!-- 				Content: -->
+<!-- 				<p class="card-text" th:text="${postitem.content}">Post Data</p> -->
+<!-- 				<a href="#" class="card-link"></a> -->
+<!-- 				<button type="button" class="btn btn-sm btn-danger" -->
+<!-- 					data-toggle="popover" -->
+<!-- 					th:attr="title=${postitem.city},data-content=${postitem.city}">Details...</button> -->
+<!-- 			</div> -->
+<!-- 			Temperature: -->
+<!-- 			<div class="card-footer text-muted" th:text="${postitem.temperature}"></div> -->
+<!-- 		</div> -->
 
 
 

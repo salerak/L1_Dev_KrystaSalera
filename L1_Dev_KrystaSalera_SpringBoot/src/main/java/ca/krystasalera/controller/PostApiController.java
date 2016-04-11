@@ -61,8 +61,8 @@ public class PostApiController {
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	@ResponseBody
 	public Post createPost(String content,String userAcctName, String city) {
-		Post post = new Post(0, 1, 0, content,content, new Date(),userAcctName,
-			city, null, null, null);
+		Post post = new Post(0, 1, 0, 0, content,content, new Date(),userAcctName,
+			city, null, null, null,null);
 		try {
 			postService.savePost(post);
 //			postRepository.save(post);

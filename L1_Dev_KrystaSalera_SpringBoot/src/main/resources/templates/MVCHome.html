@@ -37,26 +37,35 @@
 			<form action="#" th:action="@{/mvchome}" th:object="${post}"
 				method="post">
 
+
 				<table>
 
 					<tr>
 						<td>Username:</td>
 						<td><input type="text" id="userAcctNameId"
-							th:field="*{userAcctName}" onblur="checkTextField(this);" /></td>
+							th:field="*{userAcctName}" onblur="checkTextFieldUser(this);" /></td>
+						<td th:if="${#fields.hasErrors('userAcctName')}"
+							th:errors="*{userAcctName}">userAcctName Error</td>
 					</tr>
 					<tr>
 						<td>City:</td>
-						<td><input type="text" th:field="*{city}" /></td>
+						<td><input type="text" id="cityId" th:field="*{city}" /></td>
+						<td th:if="${#fields.hasErrors('city')}" th:errors="*{city}">city
+							Error</td>
 					</tr>
 					<tr>
 						<td>Content:</td>
 						<td><input type="text" th:field="*{content}" /></td>
+						<td th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content
+							Error</td>
 					</tr>
 					<tr>
+
 						<td><button class="btn btn-primary" type="submit"
 								name="action" value="save">Submit post</button></td>
 						<td><a class="btn btn-secondary-outline" th:href="@{/getall}">Get
-								All</a> <a id="getAllByUserId" class="btn btn-secondary-outline"
+								All</a></td>
+						<td><a id="getAllByUserId" class="btn btn-secondary-outline"
 							style="display: none" href="">Get All By User</a></td>
 
 
@@ -84,7 +93,7 @@
 
 		<th:block th:each="post : ${postsList}">
 
-			
+
 			<div class="card " th:style="|padding-left:${post.indentLevel}%;|">
 				<div>
 					User Account: <span class="card-header"
@@ -107,22 +116,30 @@
 					<a href="#" class="card-link"></a>
 					<button type="button" class="btn btn-sm btn-danger"
 						data-toggle="popover"
-						th:attr="title=${post.city},data-content=${post.city}">Details...</button>
+						th:attr="title=${post.city} ,data-content=${post.coordinates}">Details...</button>
 				</div>
 				Temperature:
 				<div class="card-footer text-muted" th:text="${post.temperature}"></div>
-				<div><a class="btn btn-sm btn-info" th:href="@{/replytopost/{id}(id=${post.uid})}" >Reply</a></div>
+				<div>
+					<a class="btn btn-sm btn-info"
+						th:href="@{/replytopost/{id}(id=${post.uid})}">Reply</a>
+				</div>
 			</div>
 
-			
+
 		</th:block>
 
 
 
 	</div>
 
-	<script>
-		function checkTextField(field) {
+	<script type="text/javascript">
+		//function convertTemperature(kelvin) {
+		// 			// Convert the temperature to either Celsius 
+		// 			return Math.round((kelvin - 273.15));
+		// 		}
+
+		function checkTextFieldUser(field) {
 			if (field.value == '') {
 
 				$('#getAllByUserId').attr('style', 'visibility: hidden');
@@ -137,6 +154,18 @@
 
 			}
 		}
+
+		// 		function checkTextFieldCity(field) {
+
+		// 			var value = $("#cityId").val();
+
+		// 			alert("api");
+
+		// 			$.get("https://api.openweathermap.org/data/2.5/weather?q="+ value + "\46appid=99e71dd6efdb22cccbbc0c775acc8289",  function(data) {
+		// 				alert(data);
+		// 			});
+
+		// 		}
 
 		function getAllByUser() {
 
@@ -167,6 +196,7 @@
 
 		});
 	</script>
+
 
 </body>
 </html>
