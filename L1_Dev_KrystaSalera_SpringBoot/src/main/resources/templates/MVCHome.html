@@ -126,6 +126,7 @@
 				</div>
 			</div>
 
+			<br></br>
 
 		</th:block>
 
@@ -140,7 +141,9 @@
 		// 		}
 
 		function checkTextFieldUser(field) {
-			if (field.value == '') {
+			if ($.trim(field.value) == '') {
+
+				// 			if (field.value == '') {
 
 				$('#getAllByUserId').attr('style', 'visibility: hidden');
 				// 					var value=$("#userAcctNameId").val(); 
@@ -148,30 +151,18 @@
 			} else {
 
 				$('#getAllByUserId').attr('style', 'visibility: visible');
-				var value = $("#userAcctNameId").val();
+				var value = $.trim($("#userAcctNameId").val());
 				$('#getAllByUserId')
 						.attr('href', '/getallbyuser?user=' + value);
 
 			}
 		}
 
-		// 		function checkTextFieldCity(field) {
-
-		// 			var value = $("#cityId").val();
-
-		// 			alert("api");
-
-		// 			$.get("https://api.openweathermap.org/data/2.5/weather?q="+ value + "\46appid=99e71dd6efdb22cccbbc0c775acc8289",  function(data) {
-		// 				alert(data);
-		// 			});
-
-		// 		}
-
 		function getAllByUser() {
 
 			$.ajax({
 				type : "get",
-				url : "http://localhost:8080/api/getallbyuser",
+				url : "https://localhost:8080/api/getallbyuser",
 				cache : false,
 				data : 'user=' + $("#userAcctName").val(),
 				success : function(response) {

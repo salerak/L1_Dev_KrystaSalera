@@ -31,6 +31,7 @@ public class PostApiController {
 	private final PostService postService;
 	
 
+	
 	@Inject
 	public PostApiController(final PostService postService) {
 		this.postService = postService;
@@ -40,37 +41,44 @@ public class PostApiController {
 	@ResponseBody
 	public String getText(@RequestParam("text") String text) {
 
-		// postService.save(post);
 
 		return  text;
 	}
 
-//	// CREATE
-//		@RequestMapping(value = "create", method = RequestMethod.POST)
-//		@ResponseBody
-//		public String createPost(@RequestBody Post webpost)
-//				   throws Exception {
-//			
-//			 return "creation successful: " + webpost.getContent();
-//			
-//		}
-//	
+
 	
 	
 	// CREATE
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	@ResponseBody
 	public Post createPost(String content,String userAcctName, String city) {
-		Post post = new Post(0, 1, 0, 0, content,content, new Date(),userAcctName,
-			city, null, null, null,null);
+//		Post post = new Post(0, 1, 0, 0, content,content, new Date(),userAcctName,
+//			city, null, null, null,null);
+		
+		Post post = new Post();
+		post.setParentId(0);
+		
+			post.setDisplayOrder(1);
+	
+		post.setIndentLevel(1);
+		post.setUserAcctName(userAcctName);
+		post.setSubject(content);
+		post.setContent(content);
+		post.setCreated(new Date());
+		post.setCity(city);
+		post.setLatitude(null);
+		post.setLongtitude(null);
+		post.setCoordinates(null);
+		post.setTemperature(null);
+		
 		try {
 			postService.savePost(post);
-//			postRepository.save(post);
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			// return e.getMessage();
+			
 		}
-		// return "creation successful: " + String.valueOf(post.getUid());
+		
 		return post;
 	}
 	
@@ -172,9 +180,7 @@ public class PostApiController {
  
         postService.savePost(post);
  
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(ucBuilder.path("/post/{id}").buildAndExpand(post.getUid()).toUri());
-//        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+
         return new ResponseEntity<Post>(post, HttpStatus.CREATED);
     }
  

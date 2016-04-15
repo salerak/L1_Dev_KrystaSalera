@@ -69,11 +69,11 @@
 
 						<td><button class="btn btn-primary" type="submit"
 								name="action" value="save">Submit post</button></td>
-						
 
 
 
-						
+
+
 
 					</tr>
 
@@ -92,68 +92,35 @@
 
 
 		<h1>Replying To:</h1>
-		
-		<div class="card " th:style="|padding-left:${postitem.indentLevel}%;|">
-				<div>
-					User Account: <span class="card-header"
-						th:text="${postitem.userAcctName}">User Name</span>
-				</div>
 
-				<div class="card-block">
-					<h4 th:inline="text">
-						Subject:<span class="card-title" id="test"
-							th:text="${postitem.subject}">Subject</span>
-					</h4>
-					Date Created:
-					<h6 class="card-subtitle text-muted" th:text="${postitem.created}">Date
-						Created</h6>
-				</div>
-
-				<div class="card-block">
-					Content:
-					<p class="card-text" th:text="${postitem.content}">Post Data</p>
-					<a href="#" class="card-link"></a>
-					<button type="button" class="btn btn-sm btn-danger"
-						data-toggle="popover"
-						th:attr="title=${postitem.city} ,data-content=${postitem.coordinates}">Details...</button>
-				</div>
-				Temperature:
-				<div class="card-footer text-muted" th:text="${postitem.temperature}"></div>
-		
+		<div class="card ">
+			<div>
+				User Account: <span class="card-header"
+					th:text="${postitem.userAcctName}">User Name</span>
 			</div>
-		
-		
-		
-		
-<!-- 		ééé -->
-<!-- 		<div class="card "> -->
-<!-- 			<div> -->
-<!-- 				User Account: <span class="card-header" -->
-<!-- 					th:text="${postitem.userAcctName}">User Name</span> -->
-<!-- 			</div> -->
 
-<!-- 			<div class="card-block"> -->
-<!-- 				<h4 th:inline="text"> -->
-<!-- 					Subject:<span class="card-title" id="test" -->
-<!-- 						th:text="${postitem.subject}">Subject</span> -->
-<!-- 				</h4> -->
-<!-- 				Date Created: -->
-<!-- 				<h6 class="card-subtitle text-muted" th:text="${postitem.created}">Date -->
-<!-- 					Created</h6> -->
-<!-- 			</div> -->
+			<div class="card-block">
+				<h4 th:inline="text">
+					Subject:<span class="card-title" id="test"
+						th:text="${postitem.subject}">Subject</span>
+				</h4>
+				Date Created:
+				<h6 class="card-subtitle text-muted" th:text="${postitem.created}">Date
+					Created</h6>
+			</div>
 
-<!-- 			<div class="card-block"> -->
-<!-- 				Content: -->
-<!-- 				<p class="card-text" th:text="${postitem.content}">Post Data</p> -->
-<!-- 				<a href="#" class="card-link"></a> -->
-<!-- 				<button type="button" class="btn btn-sm btn-danger" -->
-<!-- 					data-toggle="popover" -->
-<!-- 					th:attr="title=${postitem.city},data-content=${postitem.city}">Details...</button> -->
-<!-- 			</div> -->
-<!-- 			Temperature: -->
-<!-- 			<div class="card-footer text-muted" th:text="${postitem.temperature}"></div> -->
-<!-- 		</div> -->
+			<div class="card-block">
+				Content:
+				<p class="card-text" th:text="${postitem.content}">Post Data</p>
+				<a href="#" class="card-link"></a>
+				<button type="button" class="btn btn-sm btn-danger"
+					data-toggle="popover"
+					th:attr="title=${postitem.city} ,data-content=${postitem.coordinates}">Details...</button>
+			</div>
+			Temperature:
+			<div class="card-footer text-muted" th:text="${postitem.temperature}"></div>
 
+		</div>
 
 
 

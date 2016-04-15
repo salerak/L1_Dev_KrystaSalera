@@ -36,7 +36,7 @@ public interface PostRepository extends JpaRepository<Post, String> {
 	//Post findTopOrderByUidDesc(int uid);
 	
 
-	@Query("from Post p where p.userAcctName = ?1 order by created desc")
+	@Query("from Post p where p.userAcctName = ?1 order by displayOrder")
 	List<Post> findAllByUser(String user);
 
 	Post findById(int uid);
